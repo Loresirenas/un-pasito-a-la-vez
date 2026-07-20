@@ -28,6 +28,8 @@ const litros = document.getElementById("litros");
 const guardarBtn = document.getElementById("guardarBtn");
 const mensajeGuardado = document.getElementById("mensajeGuardado");
 
+const exportarBtn = document.getElementById("exportarBtn");
+
 let agua = 0;
 
 // ---------------------------
@@ -214,3 +216,34 @@ guardarBtn.addEventListener("click", () => {
 });
 
 cargar();
+
+exportarBtn.addEventListener("click", () => {
+
+    const datos = {};
+
+    for (let i = 0; i < localStorage.length; i++) {
+
+        const clave = localStorage.key(i);
+
+        if (clave.startsWith("pasito_")) {
+
+            datos[clave] = JSON.parse(localStorage.getItem(clave));
+
+        }
+
+    }
+
+    const blob = new Blob(
+        [JSON.stringify(datos, null, 2)],
+        { type: "application/json" }
+    );
+
+    const enlace = document.createElement("a");
+
+    enlace.href = URL.createObjectURL(blob);
+
+    enlace.download = "mis-registros-un-pasito.json";
+
+    enlace.click();
+
+});
