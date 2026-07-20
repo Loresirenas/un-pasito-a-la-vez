@@ -25,6 +25,9 @@ const notas = document.getElementById("notas");
 const gotas = document.querySelectorAll(".gota");
 const litros = document.getElementById("litros");
 
+const guardarBtn = document.getElementById("guardarBtn");
+const mensajeGuardado = document.getElementById("mensajeGuardado");
+
 let agua = 0;
 
 // ---------------------------
@@ -195,5 +198,19 @@ fecha.addEventListener("change", cargar);
 // ---------------------------
 // Inicio
 // ---------------------------
+
+guardarBtn.addEventListener("click", () => {
+
+    guardar();
+
+    mensajeGuardado.textContent = "✅ Registro guardado";
+
+    setTimeout(() => {
+
+        mensajeGuardado.textContent = "";
+
+    }, 2000);
+
+});
 
 cargar();
