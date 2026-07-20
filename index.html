@@ -5,77 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Un pasito a la vez</title>
 <style>
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#fff5f8;
-    color:#444;
-}
-.container{
-    max-width:420px;
-    margin:auto;
-    padding:20px;
-}
-.card{
-    background:white;
-    border-radius:18px;
-    padding:16px;
-    margin-bottom:16px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-h1{
-    color:#e85d9e;
-    text-align:center;
-}
-.subtitle{
-    text-align:center;
-    color:#888;
-}
-label{display:block;margin:8px 0;}
-input[type=number],input[type=text],textarea,select{
-    width:100%;
-    padding:10px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    box-sizing:border-box;
-}
-textarea{min-height:80px;}
-.progress{
-    width:100%;
-    height:18px;
-    background:#f1dce7;
-    border-radius:9px;
-    overflow:hidden;
-}
-.bar{
-    height:100%;
-    width:0%;
-    background:#f57db4;
-}
-footer{
-    text-align:center;
-    color:#777;
-    margin:30px 0;
-}
+body{font-family:Arial,sans-serif;background:#fff5f8;margin:0;color:#444}
+.container{max-width:430px;margin:auto;padding:18px}
+.card{background:#fff;border-radius:18px;padding:16px;margin:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+h1{text-align:center;color:#e85d9e}
+input,select,textarea{width:100%;padding:10px;margin-top:6px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box}
+label{display:block;margin:8px 0}
+button{background:#e85d9e;color:#fff;border:none;padding:12px 18px;border-radius:12px;font-size:16px;cursor:pointer}
+small{color:#777}
 </style>
 </head>
 <body>
 <div class="container">
 <h1>🌸 Un pasito a la vez</h1>
-<p class="subtitle">Cada pequeño paso te acerca a tu objetivo.</p>
 
 <div class="card">
-<strong>📅 Fecha:</strong>
-<p id="fecha"></p>
+<label>📅 Fecha
+<input type="date" id="fecha">
+</label>
+<small>Cada fecha tiene su propio registro.</small>
 </div>
 
 <div class="card">
 <h3>😴 Sueño</h3>
-<label>Horas dormidas
-<input type="number" placeholder="Ej. 7.5">
-</label>
+<label>Horas <input id="sueno" type="number" step="0.5"></label>
 <label>Calidad
-<select>
+<select id="calidad">
 <option>😴 Muy mal</option>
 <option>😕 Mal</option>
 <option>😐 Regular</option>
@@ -87,46 +42,37 @@ footer{
 
 <div class="card">
 <h3>🍽️ Comidas</h3>
-<label><input type="checkbox"> Desayuno</label>
-<label><input type="checkbox"> Almuerzo</label>
-<label><input type="checkbox"> Merienda</label>
-<label><input type="checkbox"> Cena</label>
+<label><input type="checkbox" id="desayuno"> Desayuno</label>
+<label><input type="checkbox" id="almuerzo"> Almuerzo</label>
+<label><input type="checkbox" id="merienda"> Merienda</label>
+<label><input type="checkbox" id="cena"> Cena</label>
 </div>
 
 <div class="card">
-<h3>💧 Agua</h3>
-<label><input type="checkbox"> 0,5 L</label>
-<label><input type="checkbox"> 1 L</label>
-<label><input type="checkbox"> 1,5 L</label>
-<label><input type="checkbox"> 2 L</label>
-<label><input type="checkbox"> 2,5 L</label>
-<label><input type="checkbox"> 3 L</label>
+<h3>💧 Agua (litros)</h3>
+<input id="agua" type="number" step="0.5">
 </div>
 
 <div class="card">
 <h3>🏃 Ejercicio</h3>
-<label>Tipo
-<input type="text" placeholder="Caminata, cardio...">
-</label>
-<label>Minutos
-<input type="number">
-</label>
+<label>Tipo <input id="ejercicio" type="text"></label>
+<label>Minutos <input id="minutos" type="number"></label>
 </div>
 
 <div class="card">
 <h3>👣 Actividad</h3>
-<label>Pasos<input type="number"></label>
-<label>Kilómetros<input type="number" step="0.1"></label>
+<label>Pasos <input id="pasos" type="number"></label>
+<label>Km <input id="km" type="number" step="0.1"></label>
 </div>
 
 <div class="card">
 <h3>⚖️ Peso</h3>
-<input type="number" step="0.1" placeholder="kg">
+<input id="peso" type="number" step="0.1">
 </div>
 
 <div class="card">
 <h3>😊 Estado de ánimo</h3>
-<select>
+<select id="animo">
 <option>😍 Excelente</option>
 <option>😄 Muy bien</option>
 <option selected>🙂 Bien</option>
@@ -137,26 +83,47 @@ footer{
 
 <div class="card">
 <h3>📝 Notas</h3>
-<textarea placeholder="Escribí algo sobre tu día..."></textarea>
+<textarea id="notas"></textarea>
 </div>
 
 <div class="card">
-<h3>📊 Progreso</h3>
-<div class="progress"><div class="bar"></div></div>
-<p>La barra será automática en la próxima versión.</p>
-</div>
-
-<footer>
-💗 Versión 1.0 - Un pasito a la vez
-</footer>
-
+<button id="guardar">💾 Guardar este día</button>
+<p id="estado"></p>
 </div>
 
 <script>
-document.getElementById("fecha").textContent =
-new Date().toLocaleDateString("es-ES",
-{weekday:"long",year:"numeric",month:"long",day:"numeric"});
-</script>
+const ids=["sueno","calidad","desayuno","almuerzo","merienda","cena","agua","ejercicio","minutos","pasos","km","peso","animo","notas"];
+const fecha=document.getElementById("fecha");
+const hoy=new Date().toISOString().slice(0,10);
+fecha.value=hoy;
 
+function clave(){return "registro_"+fecha.value;}
+
+function cargar(){
+ const datos=JSON.parse(localStorage.getItem(clave())||"{}");
+ ids.forEach(id=>{
+   const e=document.getElementById(id);
+   if(e.type==="checkbox") e.checked=!!datos[id];
+   else if(datos[id]!==undefined) e.value=datos[id];
+   else if(e.tagName==="SELECT"){} else e.value="";
+ });
+ document.getElementById("estado").textContent="";
+}
+
+function guardar(){
+ const datos={};
+ ids.forEach(id=>{
+   const e=document.getElementById(id);
+   datos[id]=e.type==="checkbox"?e.checked:e.value;
+ });
+ localStorage.setItem(clave(),JSON.stringify(datos));
+ document.getElementById("estado").textContent="✅ Registro guardado para "+fecha.value;
+}
+
+fecha.addEventListener("change",cargar);
+document.getElementById("guardar").addEventListener("click",guardar);
+cargar();
+</script>
+</div>
 </body>
 </html>
