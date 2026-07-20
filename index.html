@@ -7,70 +7,135 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="app">
-<header class="header">
+
+<header class="hero">
   <h1>🌸 Un pasito a la vez</h1>
-  <p id="today"></p>
-  <div class="progress"><div id="progressBar"></div></div>
-  <small id="progressText">0% completado</small>
+  <p class="subtitle">Un pequeño paso cada día.</p>
+
+  <div class="date-card">
+    <label for="fecha">📅 Fecha</label>
+    <input type="date" id="fecha">
+  </div>
+
+  <div class="progress-card">
+    <span>Progreso del día</span>
+    <div class="progress">
+      <div id="progressBar"></div>
+    </div>
+    <small id="progressText">0% completado</small>
+  </div>
 </header>
+
+<main>
 
 <section class="card">
 <h2>😴 Sueño</h2>
-<input id="sleep" type="number" step="0.5" placeholder="Horas">
-<select id="sleepQuality">
+
+<label>Horas dormidas</label>
+<input id="sueno" type="number" step="0.5" placeholder="Ej. 7.5">
+
+<label>Calidad</label>
+<select id="calidad">
 <option>😴 Muy mal</option>
 <option>😕 Mal</option>
+<option>😐 Regular</option>
 <option selected>🙂 Bien</option>
 <option>🤩 Excelente</option>
 </select>
+
 </section>
 
 <section class="card">
 <h2>🍽️ Comidas</h2>
-<label><input class="track" type="checkbox" id="breakfast"> Desayuno</label>
-<label><input class="track" type="checkbox" id="lunch"> Almuerzo</label>
-<label><input class="track" type="checkbox" id="snack"> Merienda</label>
-<label><input class="track" type="checkbox" id="dinner"> Cena</label>
+
+<label><input type="checkbox" id="desayuno"> Desayuno</label>
+<label><input type="checkbox" id="almuerzo"> Almuerzo</label>
+<label><input type="checkbox" id="merienda"> Merienda</label>
+<label><input type="checkbox" id="cena"> Cena</label>
+
 </section>
 
 <section class="card">
+
 <h2>💧 Agua</h2>
-<input id="water" class="track" type="range" min="0" max="6" value="0">
-<p><span id="waterLabel">0</span> litros</p>
+
+<p>Tocá una gota para indicar cuánto tomaste.</p>
+
+<div id="gotas" class="drops">
+<button class="drop" data-value="1">💧</button>
+<button class="drop" data-value="2">💧</button>
+<button class="drop" data-value="3">💧</button>
+<button class="drop" data-value="4">💧</button>
+<button class="drop" data-value="5">💧</button>
+<button class="drop" data-value="6">💧</button>
+</div>
+
+<p id="aguaTexto">0 litros</p>
+
 </section>
 
 <section class="card">
-<h2>🏃 Actividad</h2>
-<input id="exercise" placeholder="Ej.: Caminata">
-<input id="minutes" class="track" type="number" placeholder="Minutos">
-<input id="steps" class="track" type="number" placeholder="Pasos">
-<input id="weight" class="track" type="number" step="0.1" placeholder="Peso">
+
+<h2>🏃 Ejercicio</h2>
+
+<label>Tipo</label>
+<input id="tipoEjercicio" type="text" placeholder="Caminata, fuerza...">
+
+<label>Minutos</label>
+<input id="minutos" type="number">
+
 </section>
 
 <section class="card">
+
+<h2>👣 Actividad</h2>
+
+<label>Pasos</label>
+<input id="pasos" type="number">
+
+<label>Kilómetros</label>
+<input id="kilometros" type="number" step="0.1">
+
+</section>
+
+<section class="card">
+
+<h2>⚖️ Peso</h2>
+
+<input id="peso" type="number" step="0.1">
+
+</section>
+
+<section class="card">
+
 <h2>😊 Estado de ánimo</h2>
-<select id="mood">
+
+<select id="animo">
 <option>😍 Excelente</option>
 <option>😄 Muy bien</option>
 <option selected>🙂 Bien</option>
 <option>😐 Regular</option>
 <option>😔 Bajón</option>
 </select>
+
 </section>
 
 <section class="card">
+
 <h2>📝 Notas</h2>
-<textarea id="notes"></textarea>
+
+<textarea id="notas" rows="5"></textarea>
+
 </section>
 
-<nav class="bottom">
-<button>🏠 Hoy</button>
-<button disabled>📅 Historial</button>
-<button disabled>📈 Estadísticas</button>
-<button disabled>⚙️ Ajustes</button>
+<nav class="bottom-nav">
+<button id="btnHoy">🏠 Hoy</button>
+<button id="btnHistorial">📅 Historial</button>
 </nav>
-</div>
+
+</main>
+
 <script src="app.js"></script>
+
 </body>
 </html>
