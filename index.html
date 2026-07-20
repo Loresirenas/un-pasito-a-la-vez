@@ -1,141 +1,140 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Un pasito a la vez</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 Un pasito a la vez</title>
+
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-<header class="hero">
-  <h1>🌸 Un pasito a la vez</h1>
-  <p class="subtitle">Un pequeño paso cada día.</p>
+    <div class="container">
 
-  <div class="date-card">
-    <label for="fecha">📅 Fecha</label>
-    <input type="date" id="fecha">
-  </div>
+        <header>
+            <h1>🌸 Un pasito a la vez</h1>
+            <p>Un pequeño paso cada día.</p>
+        </header>
 
-  <div class="progress-card">
-    <span>Progreso del día</span>
-    <div class="progress">
-      <div id="progressBar"></div>
+        <section class="card">
+
+            <label for="fecha">📅 Fecha</label>
+
+            <input type="date" id="fecha">
+
+        </section>
+
+        <section class="card">
+
+            <h2>😴 Sueño</h2>
+
+            <label>Horas dormidas</label>
+
+            <input type="number" id="sueno" step="0.5" min="0" max="24">
+
+        </section>
+
+        <section class="card">
+
+            <h2>🍽️ Comidas</h2>
+
+            <label><input type="checkbox" id="desayuno"> Desayuno</label>
+
+            <label><input type="checkbox" id="almuerzo"> Almuerzo</label>
+
+            <label><input type="checkbox" id="merienda"> Merienda</label>
+
+            <label><input type="checkbox" id="cena"> Cena</label>
+
+        </section>
+
+        <section class="card">
+
+            <h2>💧 Agua</h2>
+
+            <p>Seleccioná cuánta agua tomaste</p>
+
+            <div class="gotas">
+
+                <button class="gota" data-agua="1">💧</button>
+                <button class="gota" data-agua="2">💧</button>
+                <button class="gota" data-agua="3">💧</button>
+                <button class="gota" data-agua="4">💧</button>
+                <button class="gota" data-agua="5">💧</button>
+                <button class="gota" data-agua="6">💧</button>
+
+            </div>
+
+            <p id="litros">0 litros</p>
+
+        </section>
+
+        <section class="card">
+
+            <h2>🏃 Ejercicio</h2>
+
+            <label>Tipo de ejercicio</label>
+
+            <input type="text" id="ejercicio">
+
+            <label>Minutos</label>
+
+            <input type="number" id="minutos">
+
+        </section>
+
+        <section class="card">
+
+            <h2>👣 Actividad</h2>
+
+            <label>Pasos</label>
+
+            <input type="number" id="pasos">
+
+            <label>Kilómetros</label>
+
+            <input type="number" id="kilometros" step="0.1">
+
+        </section>
+
+        <section class="card">
+
+            <h2>⚖️ Peso</h2>
+
+            <input type="number" id="peso" step="0.1">
+
+        </section>
+
+        <section class="card">
+
+            <h2>😊 Estado de ánimo</h2>
+
+            <select id="animo">
+
+                <option value="">Seleccionar...</option>
+                <option>😁 Excelente</option>
+                <option>😊 Bien</option>
+                <option>😐 Regular</option>
+                <option>😔 Mal</option>
+
+            </select>
+
+        </section>
+
+        <section class="card">
+
+            <h2>📝 Notas</h2>
+
+            <textarea id="notas" rows="5"></textarea>
+
+        </section>
+
     </div>
-    <small id="progressText">0% completado</small>
-  </div>
-</header>
 
-<main>
-
-<section class="card">
-<h2>😴 Sueño</h2>
-
-<label>Horas dormidas</label>
-<input id="sueno" type="number" step="0.5" placeholder="Ej. 7.5">
-
-<label>Calidad</label>
-<select id="calidad">
-<option>😴 Muy mal</option>
-<option>😕 Mal</option>
-<option>😐 Regular</option>
-<option selected>🙂 Bien</option>
-<option>🤩 Excelente</option>
-</select>
-
-</section>
-
-<section class="card">
-<h2>🍽️ Comidas</h2>
-
-<label><input type="checkbox" id="desayuno"> Desayuno</label>
-<label><input type="checkbox" id="almuerzo"> Almuerzo</label>
-<label><input type="checkbox" id="merienda"> Merienda</label>
-<label><input type="checkbox" id="cena"> Cena</label>
-
-</section>
-
-<section class="card">
-
-<h2>💧 Agua</h2>
-
-<p>Tocá una gota para indicar cuánto tomaste.</p>
-
-<div id="gotas" class="drops">
-<button class="drop" data-value="1">💧</button>
-<button class="drop" data-value="2">💧</button>
-<button class="drop" data-value="3">💧</button>
-<button class="drop" data-value="4">💧</button>
-<button class="drop" data-value="5">💧</button>
-<button class="drop" data-value="6">💧</button>
-</div>
-
-<p id="aguaTexto">0 litros</p>
-
-</section>
-
-<section class="card">
-
-<h2>🏃 Ejercicio</h2>
-
-<label>Tipo</label>
-<input id="tipoEjercicio" type="text" placeholder="Caminata, fuerza...">
-
-<label>Minutos</label>
-<input id="minutos" type="number">
-
-</section>
-
-<section class="card">
-
-<h2>👣 Actividad</h2>
-
-<label>Pasos</label>
-<input id="pasos" type="number">
-
-<label>Kilómetros</label>
-<input id="kilometros" type="number" step="0.1">
-
-</section>
-
-<section class="card">
-
-<h2>⚖️ Peso</h2>
-
-<input id="peso" type="number" step="0.1">
-
-</section>
-
-<section class="card">
-
-<h2>😊 Estado de ánimo</h2>
-
-<select id="animo">
-<option>😍 Excelente</option>
-<option>😄 Muy bien</option>
-<option selected>🙂 Bien</option>
-<option>😐 Regular</option>
-<option>😔 Bajón</option>
-</select>
-
-</section>
-
-<section class="card">
-
-<h2>📝 Notas</h2>
-
-<textarea id="notas" rows="5"></textarea>
-
-</section>
-
-<nav class="bottom-nav">
-<button id="btnHoy">🏠 Hoy</button>
-<button id="btnHistorial">📅 Historial</button>
-</nav>
-
-</main>
-
-<script src="app.js"></script>
+    <script src="app.js"></script>
 
 </body>
+
 </html>
