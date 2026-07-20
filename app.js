@@ -1,40 +1,105 @@
-const today=new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-document.getElementById('today').textContent=today;
-const key='upav_'+new Date().toISOString().slice(0,10);
-const ids=['sleep','sleepQuality','breakfast','lunch','snack','dinner','water','exercise','minutes','steps','weight','mood','notes'];
-function save(){
- let d={};
- ids.forEach(id=>{
-   let e=document.getElementById(id);
-   d[id]=e.type==='checkbox'?e.checked:e.value;
- });
- localStorage.setItem(key,JSON.stringify(d));
- updateProgress();
+const fecha = document.getElementById("fecha");
+const progressBar = document.getElementById("progressBar");
+const progressText = document.getElementById("progressText");
+const gotas = document.querySelectorAll(".drop");
+const aguaTexto = document.getElementById("aguaTexto");
+
+const campos = [
+  "sueno","calidad","desayuno","almuerzo","merienda","cena",
+  "tipoEjercicio","minutos","pasos","kilometros","peso","animo","notas"
+];
+
+const hoy = new Date().toISOString().slice(0,10);
+fecha.value = hoy;
+
+function clave(){
+  return "upav_" + fecha.value;
 }
-function load(){
- let d=JSON.parse(localStorage.getItem(key)||'{}');
- ids.forEach(id=>{
-   let e=document.getElementById(id);
-   if(!e)return;
-   if(e.type==='checkbox')e.checked=!!d[id];
-   else if(d[id]!=null)e.value=d[id];
- });
- document.getElementById('waterLabel').textContent=((document.getElementById('water').value||0)*0.5).toFixed(1);
- updateProgress();
+
+function guardar(){
+  const datos = {};
+
+  campos.forEach(id=>{
+    const e = document.getElementById(id);
+    if(!e) return;
+    datos[id] = e.type === "checkbox" ? e.checked : e.value;
+  });
+
+  datos.agua = Number(document.body.dataset.agua || 0);
+
+  localStorage.setItem(clave(), JSON.stringify(datos));
+  actualizarProgreso();
 }
-function updateProgress(){
- const checks=[...document.querySelectorAll('.track')];
- let done=0;
- checks.forEach(e=>{
-   if(e.type==='checkbox'&&e.checked)done++;
-   else if(e.type!=='checkbox'&&e.value!=='')done++;
- });
- let pct=Math.round(done/checks.length*100);
- document.getElementById('progressBar').style.width=pct+'%';
- document.getElementById('progressText').textContent=pct+'% completado';
+
+function cargar(){
+  const datos = JSON.parse(localStorage.getItem(clave()) || "{}");
+
+  campos.forEach(id=>{
+    const e = document.getElementById(id);
+    if(!e) return;
+
+    if(e.type==="checkbox"){
+      e.checked = !!datos[id];
+    }else{
+      e.value = datos[id] || "";
+    }
+  });
+
+  pintarGotas(datos.agua || 0);
+  actualizarProgreso();
 }
-document.querySelectorAll('input,select,textarea').forEach(e=>{
- e.addEventListener('input',()=>{if(e.id==='water')document.getElementById('waterLabel').textContent=(e.value*0.5).toFixed(1);save();});
- e.addEventListener('change',save);
+
+function pintarGotas(cantidad){
+  document.body.dataset.agua = cantidad;
+
+  gotas.forEach((g,i)=>{
+    if(i < cantidad){
+      g.classList.add("active");
+    }else{
+      g.classList.remove("active");
+    }
+  });
+
+  aguaTexto.textContent = (cantidad * 0.5).toFixed(1) + " litros";
+}
+
+gotas.forEach((gota,index)=>{
+  gota.addEventListener("click",()=>{
+    pintarGotas(index + 1);
+    guardar();
+  });
 });
-load();
+
+document.querySelectorAll("input,select,textarea").forEach(el=>{
+  el.addEventListener("input",guardar);
+  el.addEventListener("change",guardar);
+});
+
+fecha.addEventListener("change",cargar);
+
+function actualizarProgreso(){
+
+  let total = campos.length + 1;
+  let completos = 0;
+
+  campos.forEach(id=>{
+    const e = document.getElementById(id);
+
+    if(e.type === "checkbox"){
+      if(e.checked) completos++;
+    }else{
+      if(e.value !== "") completos++;
+    }
+  });
+
+  if(Number(document.body.dataset.agua || 0) > 0){
+    completos++;
+  }
+
+  const porcentaje = Math.round(completos / total * 100);
+
+  progressBar.style.width = porcentaje + "%";
+  progressText.textContent = porcentaje + "% completado";
+}
+
+cargar();
