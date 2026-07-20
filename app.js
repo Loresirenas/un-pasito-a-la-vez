@@ -1,105 +1,199 @@
+// ===========================
+// UN PASITO A LA VEZ - V1
+// ===========================
+
+// Fecha
 const fecha = document.getElementById("fecha");
-const progressBar = document.getElementById("progressBar");
-const progressText = document.getElementById("progressText");
-const gotas = document.querySelectorAll(".drop");
-const aguaTexto = document.getElementById("aguaTexto");
 
-const campos = [
-  "sueno","calidad","desayuno","almuerzo","merienda","cena",
-  "tipoEjercicio","minutos","pasos","kilometros","peso","animo","notas"
-];
+// Campos
+const sueno = document.getElementById("sueno");
+const desayuno = document.getElementById("desayuno");
+const almuerzo = document.getElementById("almuerzo");
+const merienda = document.getElementById("merienda");
+const cena = document.getElementById("cena");
 
-const hoy = new Date().toISOString().slice(0,10);
-fecha.value = hoy;
+const ejercicio = document.getElementById("ejercicio");
+const minutos = document.getElementById("minutos");
 
-function clave(){
-  return "upav_" + fecha.value;
+const pasos = document.getElementById("pasos");
+const kilometros = document.getElementById("kilometros");
+
+const peso = document.getElementById("peso");
+const animo = document.getElementById("animo");
+const notas = document.getElementById("notas");
+
+const gotas = document.querySelectorAll(".gota");
+const litros = document.getElementById("litros");
+
+let agua = 0;
+
+// ---------------------------
+// Fecha de hoy
+// ---------------------------
+
+const hoy = new Date().toISOString().split("T")[0];
+
+if (!fecha.value) {
+    fecha.value = hoy;
 }
 
-function guardar(){
-  const datos = {};
+// ---------------------------
+// Clave LocalStorage
+// ---------------------------
 
-  campos.forEach(id=>{
-    const e = document.getElementById(id);
-    if(!e) return;
-    datos[id] = e.type === "checkbox" ? e.checked : e.value;
-  });
-
-  datos.agua = Number(document.body.dataset.agua || 0);
-
-  localStorage.setItem(clave(), JSON.stringify(datos));
-  actualizarProgreso();
+function clave() {
+    return "pasito_" + fecha.value;
 }
 
-function cargar(){
-  const datos = JSON.parse(localStorage.getItem(clave()) || "{}");
+// ---------------------------
+// Guardar
+// ---------------------------
 
-  campos.forEach(id=>{
-    const e = document.getElementById(id);
-    if(!e) return;
+function guardar() {
 
-    if(e.type==="checkbox"){
-      e.checked = !!datos[id];
-    }else{
-      e.value = datos[id] || "";
+    const datos = {
+
+        agua: agua,
+
+        sueno: sueno.value,
+
+        desayuno: desayuno.checked,
+        almuerzo: almuerzo.checked,
+        merienda: merienda.checked,
+        cena: cena.checked,
+
+        ejercicio: ejercicio.value,
+        minutos: minutos.value,
+
+        pasos: pasos.value,
+        kilometros: kilometros.value,
+
+        peso: peso.value,
+
+        animo: animo.value,
+
+        notas: notas.value
+
+    };
+
+    localStorage.setItem(clave(), JSON.stringify(datos));
+
+}
+
+// ---------------------------
+// Cargar
+// ---------------------------
+
+function cargar() {
+
+    const datos = JSON.parse(localStorage.getItem(clave()));
+
+    if (!datos) {
+
+        agua = 0;
+        pintarGotas();
+
+        sueno.value = "";
+
+        desayuno.checked = false;
+        almuerzo.checked = false;
+        merienda.checked = false;
+        cena.checked = false;
+
+        ejercicio.value = "";
+        minutos.value = "";
+
+        pasos.value = "";
+        kilometros.value = "";
+
+        peso.value = "";
+
+        animo.value = "";
+
+        notas.value = "";
+
+        return;
     }
-  });
 
-  pintarGotas(datos.agua || 0);
-  actualizarProgreso();
+    agua = datos.agua || 0;
+
+    pintarGotas();
+
+    sueno.value = datos.sueno || "";
+
+    desayuno.checked = datos.desayuno || false;
+    almuerzo.checked = datos.almuerzo || false;
+    merienda.checked = datos.merienda || false;
+    cena.checked = datos.cena || false;
+
+    ejercicio.value = datos.ejercicio || "";
+    minutos.value = datos.minutos || "";
+
+    pasos.value = datos.pasos || "";
+    kilometros.value = datos.kilometros || "";
+
+    peso.value = datos.peso || "";
+
+    animo.value = datos.animo || "";
+
+    notas.value = datos.notas || "";
+
 }
 
-function pintarGotas(cantidad){
-  document.body.dataset.agua = cantidad;
+// ---------------------------
+// Gotas
+// ---------------------------
 
-  gotas.forEach((g,i)=>{
-    if(i < cantidad){
-      g.classList.add("active");
-    }else{
-      g.classList.remove("active");
-    }
-  });
+function pintarGotas() {
 
-  aguaTexto.textContent = (cantidad * 0.5).toFixed(1) + " litros";
+    gotas.forEach((gota, index) => {
+
+        if (index < agua) {
+            gota.classList.add("activa");
+        } else {
+            gota.classList.remove("activa");
+        }
+
+    });
+
+    litros.textContent = (agua * 0.5).toFixed(1) + " litros";
+
 }
 
-gotas.forEach((gota,index)=>{
-  gota.addEventListener("click",()=>{
-    pintarGotas(index + 1);
-    guardar();
-  });
+gotas.forEach((gota, index) => {
+
+    gota.addEventListener("click", () => {
+
+        agua = index + 1;
+
+        pintarGotas();
+
+        guardar();
+
+    });
+
 });
 
-document.querySelectorAll("input,select,textarea").forEach(el=>{
-  el.addEventListener("input",guardar);
-  el.addEventListener("change",guardar);
+// ---------------------------
+// Guardado automático
+// ---------------------------
+
+document.querySelectorAll("input, textarea, select").forEach(campo => {
+
+    campo.addEventListener("input", guardar);
+
+    campo.addEventListener("change", guardar);
+
 });
 
-fecha.addEventListener("change",cargar);
+// ---------------------------
+// Cambio de fecha
+// ---------------------------
 
-function actualizarProgreso(){
+fecha.addEventListener("change", cargar);
 
-  let total = campos.length + 1;
-  let completos = 0;
-
-  campos.forEach(id=>{
-    const e = document.getElementById(id);
-
-    if(e.type === "checkbox"){
-      if(e.checked) completos++;
-    }else{
-      if(e.value !== "") completos++;
-    }
-  });
-
-  if(Number(document.body.dataset.agua || 0) > 0){
-    completos++;
-  }
-
-  const porcentaje = Math.round(completos / total * 100);
-
-  progressBar.style.width = porcentaje + "%";
-  progressText.textContent = porcentaje + "% completado";
-}
+// ---------------------------
+// Inicio
+// ---------------------------
 
 cargar();
